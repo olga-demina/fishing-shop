@@ -1,17 +1,23 @@
 <script setup lang="ts">
-import { useGetImageUrl } from "../composables/getImageUrl.js";
-const props = defineProps(["fishes"]);
+import type { Fish } from "@/models";
+import { useGetImageUrl } from "../composables/getImageUrl";
+const props = defineProps({
+    fishes: {
+        type: Array<Fish>,
+    }
+});
 
 function drag(event: DragEvent, index: number) {
     event?.dataTransfer?.setData('fish', index.toString());
 }
+
 </script>
 
 <template>
     <div class="fishes">
-        <div v-for="fish, index in fishes" :index="index" class="fish-box">
-            <!-- {{ fish.name }} -->
-            <img draggable="true" @dragstart="drag($event, index)" :src="useGetImageUrl(`${fish.name}.png`)" alt="">
+        <div v-for="(fish, index) in props.fishes" :index="index" class="fish-box">
+            <img v-if="!fish.onScale" draggable="true" @dragstart="drag($event, index)"
+                :src="useGetImageUrl(`${fish.name}.png`)" alt="">
         </div>
     </div>
 

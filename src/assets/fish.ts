@@ -1,4 +1,5 @@
-const fishes = [
+import type { Fish } from "../models";
+const fishes: Fish[] = [
   {
     name: "clown-loach",
     size: 20,

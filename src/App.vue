@@ -1,8 +1,23 @@
 <script setup lang="ts">
 import Scale from "./components/Scale.vue";
 import FishList from "./components/FishList.vue";
-import fishes from "./assets/fish.js";
+import fishes from "./assets/fish";
+import { reactive } from "vue";
+import type { Fish } from "./models";
 
+type State = {
+  fishes: Fish[],
+  scaledFishes: Fish[]
+};
+
+const state: State = reactive({ fishes, scaledFishes: new Array<Fish>() });
+
+function onFishDrop(fishId: number | null): void {
+  if (fishId !== null) {
+    state.fishes[fishId].onScale = true;
+    state.scaledFishes.push(state.fishes[fishId]);
+  }
+}
 
 </script>
 
@@ -19,11 +34,11 @@ import fishes from "./assets/fish.js";
           </div>
         </div>
         <div class="shop-scales">
-          <Scale />
+          <Scale :scaledFishes="state.scaledFishes" @fish-drop="onFishDrop" />
         </div>
       </div>
       <div class="shop-bottom">
-        <FishList :fishes="fishes" />
+        <FishList :fishes="state.fishes" />
       </div>
     </div>
   </div>
